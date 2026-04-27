@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Blog</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow" data-i18n="siteEyebrow">Study notes</p>
+        <h1 data-i18n="siteTitle">Study Blog</h1>
+      </div>
+      <div class="topbar-actions">
+        <nav class="tabs" aria-label="Main sections" data-i18n-aria="mainSections">
+          <button class="tab is-active" type="button" data-tab="home" data-i18n="homeTab">Home</button>
+          <button class="tab" type="button" data-tab="editor" data-i18n="editorTab">New Article</button>
+          <button class="tab" type="button" data-tab="archive" data-i18n="archiveTab">All Articles</button>
+          <button class="tab" type="button" data-tab="books" data-i18n="booksTab">Books</button>
+        </nav>
+        <div class="language-switcher" aria-label="Language selector" data-i18n-aria="languageSelector">
+          <button class="language-button is-active" type="button" data-lang="en">EN</button>
+          <button class="language-button" type="button" data-lang="pt">PT</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="view is-visible" id="home-view" aria-labelledby="home-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="featuredEyebrow">Manually selected</p>
+            <h2 id="home-title" data-i18n="featuredTitle">Featured</h2>
+          </div>
+          <button class="text-button" type="button" data-tab-target="editor" data-i18n="writeStudyNote">Write a study note</button>
+        </div>
+        <div class="article-grid" id="featured-list"></div>
+      </section>
+
+      <section class="view" id="editor-view" aria-labelledby="editor-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="createEyebrow">Create</p>
+            <h2 id="editor-title" data-i18n="articleEditorTitle">Article Editor</h2>
+          </div>
+          <p class="line-counter"><span id="line-count">0</span> <span data-i18n="lineLimit">/ 1,000 lines</span></p>
+        </div>
+
+        <form class="editor" id="article-form">
+          <label>
+            <span data-i18n="articleTitleLabel">Article title</span>
+            <input id="article-title" type="text" maxlength="120" placeholder="Example: JavaScript closures" data-i18n-placeholder="articleTitlePlaceholder" required />
+          </label>
+
+          <label>
+            <span data-i18n="contentLabel">Content</span>
+            <textarea
+              id="article-content"
+              rows="18"
+              placeholder="Write your study notes here..."
+              data-i18n-placeholder="contentPlaceholder"
+              required
+            ></textarea>
+          </label>
+
+          <div class="media-row">
+            <label class="file-picker">
+              <span data-i18n="mediaLabel">Upload images or media</span>
+              <input id="article-media" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.txt,.md" />
+            </label>
+            <label class="featured-toggle">
+              <input id="article-featured" type="checkbox" />
+              <span data-i18n="featureCheckbox">Feature on homepage</span>
+            </label>
+          </div>
+
+          <div class="media-preview" id="media-preview" aria-live="polite"></div>
+
+          <div class="form-actions">
+            <button class="secondary-button" type="button" id="clear-form" data-i18n="clearButton">Clear</button>
+            <button class="primary-button" type="submit" data-i18n="publishButton">Publish Article</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="view" id="archive-view" aria-labelledby="archive-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="publishedEyebrow">Published</p>
+            <h2 id="archive-title" data-i18n="allArticlesTitle">All Articles</h2>
+          </div>
+        </div>
+        <div class="article-list" id="article-list"></div>
+      </section>
+
+      <section class="view" id="books-view" aria-labelledby="books-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="booksEyebrow">Reading log</p>
+            <h2 id="books-title" data-i18n="booksTitle">Books</h2>
+          </div>
+        </div>
+
+        <form class="editor compact-editor" id="book-form">
+          <div class="book-form-grid">
+            <label>
+              <span data-i18n="bookTitleLabel">Book title</span>
+              <input id="book-title" type="text" maxlength="120" placeholder="Example: Clean Code" data-i18n-placeholder="bookTitlePlaceholder" required />
+            </label>
+            <label>
+              <span data-i18n="bookAuthorLabel">Author</span>
+              <input id="book-author" type="text" maxlength="120" placeholder="Example: Robert C. Martin" data-i18n-placeholder="bookAuthorPlaceholder" />
+            </label>
+            <label>
+              <span data-i18n="bookRatingLabel">Rating</span>
+              <select id="book-rating" required>
+                <option value="5">5 / 5</option>
+                <option value="4">4 / 5</option>
+                <option value="3">3 / 5</option>
+                <option value="2">2 / 5</option>
+                <option value="1">1 / 5</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            <span data-i18n="bookNotesLabel">Notes</span>
+            <textarea id="book-notes" rows="5" placeholder="What did this book teach you?" data-i18n-placeholder="bookNotesPlaceholder"></textarea>
+          </label>
+          <div class="form-actions">
+            <button class="secondary-button" type="button" id="clear-book-form" data-i18n="clearButton">Clear</button>
+            <button class="primary-button" type="submit" data-i18n="addBookButton">Add Book</button>
+          </div>
+        </form>
+
+        <div class="book-list" id="book-list"></div>
+      </section>
+    </main>
+
+    <template id="article-card-template">
+      <article class="article-card">
+        <div class="article-media-slot"></div>
+        <div class="article-body">
+          <div class="article-meta"></div>
+          <h3></h3>
+          <p></p>
+          <div class="article-actions">
+            <button class="text-button" type="button" data-action="read"></button>
+            <button class="text-button" type="button" data-action="toggle-featured"></button>
+            <button class="danger-button" type="button" data-action="delete"></button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="book-card-template">
+      <article class="book-card">
+        <div>
+          <p class="article-meta"></p>
+          <h3></h3>
+          <p></p>
+        </div>
+        <button class="danger-button" type="button" data-action="delete-book"></button>
+      </article>
+    </template>
+
+    <dialog class="reader" id="article-reader">
+      <div class="reader-header">
+        <div>
+          <p class="eyebrow" id="reader-meta"></p>
+          <h2 id="reader-title"></h2>
+        </div>
+        <button class="secondary-button" type="button" id="close-reader" data-i18n="closeButton">Close</button>
+      </div>
+      <div class="reader-content" id="reader-content"></div>
+      <div class="reader-media" id="reader-media"></div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
