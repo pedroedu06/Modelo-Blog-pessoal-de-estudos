@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Study Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -23,6 +24,7 @@
           <button class="language-button is-active" type="button" data-lang="en">EN</button>
           <button class="language-button" type="button" data-lang="pt">PT</button>
         </div>
+        <button class="theme-toggle" type="button" id="theme-toggle" data-i18n="darkModeButton">Dark Mode</button>
       </div>
     </header>
 
@@ -55,14 +57,171 @@
 
           <label>
             <span data-i18n="contentLabel">Content</span>
-            <textarea
+            <div class="editor-toolbar" aria-label="Formatting tools" data-i18n-aria="formattingTools">
+              <div class="toolbar-group" aria-label="Text colors" data-i18n-aria="textColors">
+                <button class="color-swatch is-black" type="button" data-color="#111111" title="Black"></button>
+                <button class="color-swatch is-white" type="button" data-color="#ffffff" title="White"></button>
+                <button class="color-swatch is-blue" type="button" data-color="#2563eb" title="Blue"></button>
+                <button class="color-swatch is-gray" type="button" data-color="#6b7280" title="Gray"></button>
+                <button class="color-swatch is-red" type="button" data-color="#dc2626" title="Red"></button>
+                <input class="custom-color" id="custom-color" type="color" value="#0f7b6c" title="Custom color" />
+              </div>
+              <div class="toolbar-group">
+                <select id="font-size-select" aria-label="Font size" data-i18n-aria="fontSizeLabel">
+                  <option value="" data-i18n="fontSizeOption">Font size</option>
+                  <option value="14">14px</option>
+                  <option value="16">16px</option>
+                  <option value="18">18px</option>
+                  <option value="22">22px</option>
+                  <option value="28">28px</option>
+                </select>
+                <button class="secondary-button toolbar-button" type="button" data-format="h1">H1</button>
+                <button class="secondary-button toolbar-button" type="button" data-format="h2">H2</button>
+              </div>
+              <div class="toolbar-group">
+                <button class="secondary-button toolbar-button" type="button" id="code-block-button" data-i18n="codeBlockButton">Add Code</button>
+                <button class="secondary-button toolbar-button" type="button" id="formula-block-button" data-i18n="formulaBlockButton">Add Formula</button>
+                <button class="secondary-button toolbar-button" type="button" id="diagram-block-button" data-i18n="diagramBlockButton">Add Diagram</button>
+                <button class="secondary-button toolbar-button" type="button" data-format="divider" data-i18n="dividerButton">Divider</button>
+                <button class="secondary-button toolbar-button" type="button" data-format="paragraph" data-i18n="paragraphButton">Paragraph</button>
+              </div>
+            </div>
+            <div
+              class="rich-editor"
               id="article-content"
-              rows="18"
-              placeholder="Write your study notes here..."
+              contenteditable="true"
+              role="textbox"
+              aria-multiline="true"
+              data-placeholder="Write your study notes here..."
               data-i18n-placeholder="contentPlaceholder"
-              required
-            ></textarea>
+            ></div>
           </label>
+
+          <section class="code-composer is-hidden" id="code-composer" aria-labelledby="code-composer-title">
+            <div class="code-composer-header">
+              <div>
+                <p class="eyebrow" id="code-composer-title" data-i18n="codeComposerTitle">Code Block</p>
+                <h3 data-i18n="codeComposerHeading">Write and preview code</h3>
+              </div>
+              <button class="secondary-button" type="button" id="close-code-composer" data-i18n="closeButton">Close</button>
+            </div>
+            <label>
+              <span data-i18n="codeLanguageLabel">Language</span>
+              <input id="code-language" type="text" value="javascript" placeholder="javascript" data-i18n-placeholder="codeLanguagePlaceholder" />
+            </label>
+            <label>
+              <span data-i18n="codeWriteLabel">Write</span>
+              <textarea id="code-editor" rows="8" placeholder="const message = 'Hello';" data-i18n-placeholder="codeWritePlaceholder"></textarea>
+            </label>
+            <div>
+              <p class="eyebrow" data-i18n="codePreviewLabel">Preview</p>
+              <div class="article-rendered code-live-preview" id="code-live-preview"></div>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" type="button" id="insert-code-block" data-i18n="insertCodeButton">Insert Code Block</button>
+            </div>
+          </section>
+
+          <section class="code-composer formula-composer is-hidden" id="formula-composer" aria-labelledby="formula-composer-title">
+            <div class="code-composer-header">
+              <div>
+                <p class="eyebrow" id="formula-composer-title" data-i18n="formulaComposerTitle">Formula Block</p>
+                <h3 data-i18n="formulaComposerHeading">Write and preview LaTeX</h3>
+              </div>
+              <button class="secondary-button" type="button" id="close-formula-composer" data-i18n="closeButton">Close</button>
+            </div>
+            <label>
+              <span data-i18n="formulaWriteLabel">Formula</span>
+              <textarea id="formula-editor" rows="5" placeholder="\color{#ff5f56}{H(X)}=-\sum_{i=1}^{n}p(x_i)\ln p(x_i)" data-i18n-placeholder="formulaWritePlaceholder"></textarea>
+            </label>
+            <div>
+              <p class="eyebrow" data-i18n="formulaPreviewLabel">Preview</p>
+              <div class="article-rendered formula-live-preview" id="formula-live-preview"></div>
+            </div>
+            <div class="formula-options">
+              <label class="featured-toggle">
+                <input id="formula-inline-mode" type="checkbox" />
+                <span data-i18n="formulaInlineLabel">Inline formula</span>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" type="button" id="insert-formula-block" data-i18n="insertFormulaButton">Insert into Post</button>
+            </div>
+          </section>
+
+          <section class="diagram-composer is-hidden" id="diagram-composer" aria-labelledby="diagram-composer-title">
+            <div class="code-composer-header">
+              <div>
+                <p class="eyebrow" id="diagram-composer-title" data-i18n="diagramComposerTitle">Diagram Builder</p>
+                <h3 data-i18n="diagramComposerHeading">Create and customize a diagram</h3>
+              </div>
+              <div class="diagram-header-actions">
+                <button class="secondary-button" type="button" id="diagram-zoom-out">-</button>
+                <button class="secondary-button" type="button" id="diagram-zoom-in">+</button>
+                <button class="secondary-button" type="button" id="close-diagram-composer" data-i18n="closeButton">Close</button>
+              </div>
+            </div>
+            <div class="diagram-builder">
+              <aside class="diagram-toolbar" aria-label="Diagram tools">
+                <button class="secondary-button" type="button" data-shape="rectangle" data-i18n="shapeRectangle">Rectangle</button>
+                <button class="secondary-button" type="button" data-shape="square" data-i18n="shapeSquare">Square</button>
+                <button class="secondary-button" type="button" data-shape="circle" data-i18n="shapeCircle">Circle</button>
+                <button class="secondary-button" type="button" data-shape="triangle" data-i18n="shapeTriangle">Triangle</button>
+                <button class="secondary-button" type="button" data-shape="parallelogram" data-i18n="shapeParallelogram">Parallelogram</button>
+                <button class="secondary-button" type="button" data-shape="diamond" data-i18n="shapeDiamond">Diamond</button>
+                <button class="secondary-button" type="button" id="diagram-undo" data-i18n="undoButton">Undo</button>
+                <button class="secondary-button" type="button" id="diagram-redo" data-i18n="redoButton">Redo</button>
+              </aside>
+              <div class="diagram-stage-wrap">
+                <svg id="diagram-stage" class="diagram-stage" viewBox="0 0 1000 620" role="img" aria-label="Diagram canvas"></svg>
+              </div>
+              <aside class="diagram-properties" id="diagram-properties">
+                <p class="eyebrow" data-i18n="propertiesTitle">Properties</p>
+                <label>
+                  <span data-i18n="diagramTextLabel">Text</span>
+                  <input id="diagram-text" type="text" />
+                </label>
+                <label>
+                  <span data-i18n="textColorLabel">Text color</span>
+                  <input id="diagram-text-color" type="color" value="#ffffff" />
+                </label>
+                <label>
+                  <span data-i18n="backgroundColorLabel">Background</span>
+                  <input id="diagram-bg-color" type="color" value="#2563eb" />
+                </label>
+                <label>
+                  <span data-i18n="borderColorLabel">Border</span>
+                  <input id="diagram-border-color" type="color" value="#93c5fd" />
+                </label>
+                <div class="diagram-size-row">
+                  <label>
+                    <span data-i18n="widthLabel">Width</span>
+                    <input id="diagram-width" type="number" min="40" max="500" />
+                  </label>
+                  <label>
+                    <span data-i18n="heightLabel">Height</span>
+                    <input id="diagram-height" type="number" min="40" max="500" />
+                  </label>
+                </div>
+                <div class="diagram-property-actions">
+                  <button class="secondary-button" type="button" id="diagram-front" data-i18n="bringFrontButton">Front</button>
+                  <button class="secondary-button" type="button" id="diagram-back" data-i18n="sendBackButton">Back</button>
+                  <button class="danger-button" type="button" id="diagram-delete" data-i18n="deleteButton">Delete</button>
+                </div>
+              </aside>
+            </div>
+            <div class="form-actions">
+              <button class="secondary-button" type="button" id="diagram-export-svg" data-i18n="exportSvgButton">Export SVG</button>
+              <button class="primary-button" type="button" id="insert-diagram-block" data-i18n="insertDiagramButton">Insert Diagram into Post</button>
+            </div>
+          </section>
+
+          <section class="article-preview-panel" aria-labelledby="preview-title">
+            <div class="preview-header">
+              <p class="eyebrow" id="preview-title" data-i18n="previewTitle">Preview</p>
+            </div>
+            <div class="article-rendered preview-content" id="article-preview"></div>
+          </section>
 
           <div class="media-row">
             <label class="file-picker">
@@ -172,10 +331,11 @@
         </div>
         <button class="secondary-button" type="button" id="close-reader" data-i18n="closeButton">Close</button>
       </div>
-      <div class="reader-content" id="reader-content"></div>
+      <div class="reader-content article-rendered" id="reader-content"></div>
       <div class="reader-media" id="reader-media"></div>
     </dialog>
 
-    <script src="app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+    <script defer src="app.js"></script>
   </body>
 </html>
